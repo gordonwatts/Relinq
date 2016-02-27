@@ -22,9 +22,13 @@ namespace Remotion.Linq.Development.UnitTesting
 {
   public class StubQueryExecutor : IQueryExecutor
   {
+    public static QueryModel LastQM { get; private set; }
+
     public T ExecuteScalar<T> (QueryModel queryModel)
     {
-      throw new NotImplementedException ("ExecuteScalar<" + typeof (T).Name + "> (" + queryModel + ")");
+      LastQM = queryModel;
+      return default(T);
+      //throw new NotImplementedException ("ExecuteScalar<" + typeof (T).Name + "> (" + queryModel + ")");
     }
 
     public T ExecuteSingle<T> (QueryModel queryModel, bool returnDefaultWhenEmpty)

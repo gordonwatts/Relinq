@@ -282,6 +282,18 @@ namespace Remotion.Linq.UnitTests
     }
 
     [Test]
+    public void Clone_AgreegateBomb()
+    {
+      var q1 = ExpressionHelper.CreateQueryable<int[]>();
+      var rInt = from e in q1
+            select e.Count();
+      var r = rInt.Aggregate(0.0, (acc, val) => acc + val);
+
+      var qm = StubQueryExecutor.LastQM;
+      qm.Clone();
+    }
+
+    [Test]
     public void Clone_HasCloneForSelectClause ()
     {
       var selectClause = _queryModel.SelectClause;
