@@ -290,7 +290,9 @@ namespace Remotion.Linq.UnitTests
       var r = rInt.Aggregate(0.0, (acc, val) => acc + val);
 
       var qm = StubQueryExecutor.LastQM;
-      qm.Clone();
+      Console.WriteLine(qm);
+      var clone = qm.Clone();
+      Console.WriteLine(clone);
     }
 
     [Test]

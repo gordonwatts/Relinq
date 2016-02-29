@@ -70,10 +70,22 @@ namespace Remotion.Linq.Clauses
     public MainFromClause Clone (CloneContext cloneContext)
     {
       ArgumentUtility.CheckNotNull ("cloneContext", cloneContext);
-
-      var clone = new MainFromClause (ItemName, ItemType, FromExpression);
-      cloneContext.QuerySourceMapping.AddMapping (this, new QuerySourceReferenceExpression (clone));
-      return clone;
+      
+      // If the main from clause has already been cloned (e.g. outter reference), then just pick up the previous clone.
+      if (cloneContext.QuerySourceMapping.ContainsMapping(this))
+      {
+        var cloneExpression = cloneContext.QuerySourceMapping.GetExpression(this);
+        var clone = (cloneExpression as QuerySourceReferenceExpression).ReferencedQuerySource as MainFromClause;
+        if (clone == null)
+          throw new InvalidOperationException("THis should never happen");
+        return clone;
+      }
+      else
+      {
+        var clone = new MainFromClause(ItemName, ItemType, FromExpression);
+        cloneContext.QuerySourceMapping.AddMapping(this, new QuerySourceReferenceExpression(clone));
+        return clone;
+      }
     }
   }
 }
